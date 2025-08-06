@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import Callable, Type, TypeVar, overload
+import warnings
 
 from ._compat import Self, TypeAlias
 from .core import Operator
+
 
 
 class AlreadyRegistered(Exception):
@@ -15,11 +17,21 @@ class AlreadyRegistered(Exception):
         self.operator_id = operator_id
 
 
-class UnkownOperator(Exception):
+class UnknownOperator(Exception):
     """The provided ID does not exist in the registry."""
 
     def __init__(self, operator_id: str, /) -> None:
         self.operator_id = operator_id
+
+class UnkownOperator(UnknownOperator):
+    def __init__(self, operator_id: str, /):
+        warnings.warn(
+            "UnkownOperator is deprecated and will be removed in a future release. "
+            "Please use UnknownOperator instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        super().__init__(operator_id)
 
 
 OperatorType: TypeAlias = Type[Operator]

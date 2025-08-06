@@ -53,13 +53,17 @@ def test_force():
     assert registry.get("var") is Var2
 
 
-def test_get_unknown():
+def test_get_unknown(recwarn):
     registry = OperatorRegistry()
 
     with pytest.raises(UnkownOperator) as exc:
         registry.get("unknown")
 
     assert exc.value.operator_id == "unknown"
+
+    warning = recwarn.pop()
+    assert issubclass(warning.category, DeprecationWarning)
+    assert "UnkownOperator is deprecated and will be removed" in str(warning.message)
 
 
 def test_remove():
