@@ -9,7 +9,6 @@ from ._compat import Self, TypeAlias
 from .core import Operator
 
 
-
 class AlreadyRegistered(Exception):
     """The provided ID is already registered."""
 
